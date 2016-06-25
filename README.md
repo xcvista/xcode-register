@@ -35,7 +35,7 @@ Execute this for complete instructions of `xcode-register`:
 
 ## License
 
-`xcode-build` is covered in [the three-clause BSD license](LICENSE.md).
+`xcode-register` is covered in [the three-clause BSD license](LICENSE.md).
 
 ## Contact information
 

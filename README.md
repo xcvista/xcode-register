@@ -15,6 +15,8 @@ fairly robust.
 Copy and paste the following shell script into a Terminal windowto install or
 update `xcode-register`:
 
+    curl -L https://github.com/xcvista/xcode-register/raw/master/xcode-register-install.sh | bash
+
 ## Usage
 
 The simplest way of using `xcode-register` is to let it register all existing

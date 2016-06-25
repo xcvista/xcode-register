@@ -5,7 +5,7 @@ LOCAL_PATH=xcode-register-master
 
 curl -L $REMOTE_PATH | tar xz
 pushd $LOCAL_PATH
-xcodebuild -alltarget build
-sudo xcodebuild -alltarget install
+xcodebuild -alltargets build
+sudo xcodebuild -alltargets install
 popd
 rm -r $LOCAL_PATH

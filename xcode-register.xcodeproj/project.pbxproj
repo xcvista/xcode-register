@@ -23,6 +23,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1D9FD30E1D1E798100266E11 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		1D9FD30F1D1E79C500266E11 /* LICENSE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
+		1D9FD3101D1E79DD00266E11 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1DCC05F61D1E67AD000C95A2 /* xcode-register */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "xcode-register"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DCC05F91D1E67AD000C95A2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -41,6 +44,9 @@
 		1DCC05ED1D1E67AD000C95A2 = {
 			isa = PBXGroup;
 			children = (
+				1D9FD30E1D1E798100266E11 /* .gitignore */,
+				1D9FD30F1D1E79C500266E11 /* LICENSE.md */,
+				1D9FD3101D1E79DD00266E11 /* README.md */,
 				1DCC05F81D1E67AD000C95A2 /* xcode-register */,
 				1DCC05F71D1E67AD000C95A2 /* Products */,
 			);
@@ -244,6 +250,7 @@
 				1DCC05FF1D1E67AD000C95A2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

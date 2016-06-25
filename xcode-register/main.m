@@ -18,6 +18,7 @@ static const struct option options[] =
     { "version",    no_argument,        NULL,   'V' },
     { "verbose",    no_argument,        NULL,   'v' },
     { "xcode",      required_argument,  NULL,   'x' },
+    { "delete",     no_argument,        NULL,   'd' },
     { NULL,         0,                  NULL,   0 }
 };
 
@@ -31,6 +32,7 @@ void usage(const char *argv0)
             "Options:\n"
             "        --xcode, -x:    Path to the Xcode application.\n"
             "                        Default to /Applications/Xcode.app.\n"
+            "        --delete, -d:   Unregister instead of register the bundle.\n"
             "        --verbose, -v:  Increase verbosity, print debug information.\n"
             "        --help, -h:     Print this message and exit.\n"
             "        --version, -V:  Print version information and exit.\n",
@@ -53,9 +55,10 @@ int main(int argc, const char * argv[]) {
         NSString *xcodePath = @"/Applications/Xcode.app";
         NSMutableArray<NSBundle *> *xcodeBundles = [NSMutableArray array];
         BOOL verbose = NO;
+        BOOL delete = NO;
         
         int ch = 0;
-        while ((ch = getopt_long(argc, (char *const *)argv, "hVvx:", options, NULL)) != -1)
+        while ((ch = getopt_long(argc, (char *const *)argv, "hVdvx:", options, NULL)) != -1)
         {
             switch (ch)
             {
@@ -69,6 +72,9 @@ int main(int argc, const char * argv[]) {
                     break;
                 case 'v':
                     verbose = YES;
+                    break;
+                case 'd':
+                    delete = YES;
                     break;
                 case 'x':
                     xcodePath = @(optarg);
@@ -123,7 +129,7 @@ int main(int argc, const char * argv[]) {
         
         if (verbose)
         {
-            fprintf(stderr, "Installing UUID %s for Xcode installation %s to bundles:\n", xcodeUUID.UTF8String, xcodePath.UTF8String);
+            fprintf(stderr, "%s UUID %s for Xcode installation %s to bundles:\n", delete ? "Deleting" : "Installing", xcodeUUID.UTF8String, xcodePath.UTF8String);
             for (NSBundle *item in xcodeBundles)
                 fprintf(stderr, "* %s (%s)\n", item.bundlePath.UTF8String, item.bundleIdentifier.UTF8String);
         }
@@ -154,12 +160,24 @@ int main(int argc, const char * argv[]) {
             }
             
             NSMutableArray *compatibilityUUIDs = infoDictionary[@"DVTPlugInCompatibilityUUIDs"];
-            if ([compatibilityUUIDs containsObject:xcodeUUID])
+            if (delete)
             {
-                fprintf(stderr, "Bundle %s (%s) already supports this Xcode version. Skipping.\n", bundle.bundlePath.UTF8String, bundle.bundleIdentifier.UTF8String);
-                continue;
+                if (![compatibilityUUIDs containsObject:xcodeUUID])
+                {
+                    fprintf(stderr, "Bundle %s (%s) is already rejected by this Xcode version. Skipping.\n", bundle.bundlePath.UTF8String, bundle.bundleIdentifier.UTF8String);
+                    continue;
+                }
+                [compatibilityUUIDs removeObject:xcodeUUID];
             }
-            [compatibilityUUIDs addObject:xcodeUUID];
+            else
+            {
+                if ([compatibilityUUIDs containsObject:xcodeUUID])
+                {
+                    fprintf(stderr, "Bundle %s (%s) already supports this Xcode version. Skipping.\n", bundle.bundlePath.UTF8String, bundle.bundleIdentifier.UTF8String);
+                    continue;
+                }
+                [compatibilityUUIDs addObject:xcodeUUID];
+            }
             
             error = nil;
             plistData = [NSPropertyListSerialization dataWithPropertyList:infoDictionary
@@ -181,7 +199,7 @@ int main(int argc, const char * argv[]) {
             
             if (verbose)
             {
-                fprintf(stderr, "Registered bundle %s (%s).\n", bundle.bundlePath.UTF8String, bundle.bundleIdentifier.UTF8String);
+                fprintf(stderr, "Modified bundle %s (%s).\n", bundle.bundlePath.UTF8String, bundle.bundleIdentifier.UTF8String);
             }
         }
     }
